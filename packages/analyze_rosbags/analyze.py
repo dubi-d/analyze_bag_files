@@ -2,15 +2,14 @@
 import rosbag
 import statistics
 
+
 class Analyzer:
     def __init__(self):
-        self.prev_timestamp = {"/tesla/camera_node/camera_info": None,
-                               "/tesla/line_detector_node/segment_list": None,
-                               "/tesla/wheels_driver_node/wheels_cmd": None}
-
-        self.periods = {"/tesla/camera_node/camera_info": [],
-                     "/tesla/line_detector_node/segment_list": [],
-                     "/tesla/wheels_driver_node/wheels_cmd": []}
+        topics = ["/tesla/camera_node/camera_info",
+                  "/tesla/line_detector_node/segment_list",
+                  "/tesla/wheels_driver_node/wheels_cmd"]  # could be put in a config file
+        self.prev_timestamp = {key: None for key in topics}
+        self.periods = {key: [] for key in topics}
 
     def add_msg_data(self, topic, t):
 
@@ -42,8 +41,6 @@ class Analyzer:
             print()
 
 
-
-
 if __name__ == "__main__":
     
     bag = rosbag.Bag("/home/rosbags/example_rosbag_H3.bag")
@@ -51,8 +48,6 @@ if __name__ == "__main__":
     analyzer = Analyzer() 
 
     for topic, msg, t in bag.read_messages():
-        print(t)
-        print(type(t))
         analyzer.add_msg_data(topic, t)
     bag.close()
 
