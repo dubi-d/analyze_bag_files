@@ -19,8 +19,8 @@ class Analyzer:
             self.prev_timestamp[topic] = t
             return
 
-        diff = t - self.prev_timestamp
-        self.periods[topic].append(diff)
+        diff = t - self.prev_timestamp[topic]
+        self.periods[topic].append(diff.to_sec())
         self.prev_timestamp[topic] = t
 
 
